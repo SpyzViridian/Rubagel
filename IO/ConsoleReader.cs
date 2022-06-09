@@ -1,26 +1,33 @@
 ﻿namespace Spyz.Rubagel.IO;
 
 using System;
-using System.IO;
 
-public class ConsoleReader : ILineReader {
+public class ConsoleReader : RubagelBase, ILineReader {
+
+	private const string EXIT = "exit";
+	private const string INPUT_CHARACTERS = ">";
 
 	// ------------------------------------------------------------------------
 	// PROPERTIES
 	// ------------------------------------------------------------------------
 
-	public string ResourceName => null;
+	public string Resource => null;
 
 	// ------------------------------------------------------------------------
 	// METHODS
 	// ------------------------------------------------------------------------
 
-	public void ForEachLine(Action<string> action) {
-		string line;
+	public void ForEachLine(LineConsumer lineConsumer) {
 		while(true) {
-			line = Console.ReadLine();
-			if (string.IsNullOrEmpty(line)) break;
-			action(line);
+			Output.Print(INPUT_CHARACTERS, OutputColor.Cyan);
+			string line = Console.ReadLine();
+			if (line.Trim() == EXIT) break;
+			try {
+				lineConsumer(line, new(null, 0, 0));
+			} catch (Exception e) {
+				Output.PrintLine(e.Message, OutputColor.Red);
+			}
+			
 		}
 	}
 }

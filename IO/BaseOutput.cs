@@ -1,6 +1,6 @@
 ﻿namespace Spyz.Rubagel.IO;
 
-using Spyz.Rubagel.IO.Extensions;
+using Spyz.Rubagel.Extensions;
 
 public abstract class BaseOutput : IOutput {
 
