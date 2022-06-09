@@ -1,0 +1,93 @@
+﻿# From most to least important
+# Token			Pattern			Tags						Precedence
+
+# Tokens to ignore
+Whitespace		\s+				Ignore
+LineComment		//				Ignore
+CommentOpen		/*				Ignore
+CommentClose	*/				Ignore
+
+# String parsing
+Escape			(\\[^u])|(\\u[0-9A-Fa-f]{4})
+String			"((\\"|.|\\"|\\||\b)*?)"
+
+# Identifiers
+RuleIdentifier	\$[$a-zA-Z1-9_]+
+Variable		@([a-zA-Z_]+[a-zA-Z1-9_]*(\.[a-zA-Z_]+[a-zA-Z1-9_]*)*)
+Function		#([a-zA-Z_]+[a-zA-Z1-9_]*(\.[a-zA-Z_]+[a-zA-Z1-9_]*)*)
+
+# Primitive types
+Char			'(.)'
+Hex				0x\d{1,10}
+Integer			\d{1,10}
+Float			(\d{1,10}\.\d{1,10})|\.\d{1,10}
+Boolean			False|True
+
+# Primitive type names
+CharType		char
+IntType			int
+FloatType		float
+BoolType		bool
+StringType		str
+
+# Delimiters
+Arrow			->
+Comma			,
+Semicolon		;
+VerticalBar		\|
+LeftSquare		[
+RightSquare		]
+LeftKey			{
+RightKey		}
+LeftParen		(
+RightParen		)
+Hashtag			#
+At				@
+Dollar			$
+
+# Boolean operators
+And				and				Binary&Infix				5
+Or				or				Binary&Infix				4
+Not				not				Unary&Prefix				5
+Xor				xor				Binary&Infix				4
+
+# Assignment operators
+AddAssign		\+=				Binary&Infix				1
+SubAssign		-=				Binary&Infix				1
+PowerAssign		\*\*=			Binary&Infix				3
+MultAssign		\*=				Binary&Infix				2
+DivAssign		-=				Binary&Infix				2
+ModuloAssign	%=				Binary&Infix				2
+
+# Operators
+Add				\+				Binary&Infix				7
+Sub				-				Binary&Unary&Infix&Prefix	7
+Power			**				Binary&Infix				9
+Mult			\*				Binary&Infix				8
+Div				/				Binary&Infix				8
+Modulo			%				Binary&Infix				8
+Equals			==				Binary&Infix				6
+NotEquals		!=				Binary&Infix				6
+GEquals			>=				Binary&Infix				6
+LEquals			<=				Binary&Infix				6
+Less			<				Binary&Infix				6
+Greater			>				Binary&Infix				6
+Assign			=				Binary&Infix				0
+
+# Bitwise operators
+BitwiseAnd		\^				Binary&Infix				5
+BitwiseOr		\v				Binary&Infix				4
+BitwiseNot		¬				Unary&Prefix				5
+BitwiseXor		bxor			Binary&Infix				4
+
+# Reserved keywords
+If				if
+Local			local
+Global			global
+Context			context
+Shared			shared
+When			when
+Return			return
+Define			define
+
+Error			.+
