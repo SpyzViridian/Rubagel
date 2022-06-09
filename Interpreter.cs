@@ -13,16 +13,16 @@ public class Interpreter : RubagelBase {
 
 	private const string TOKEN_DATA_FILE = "tokens";
 
-	private static IList<TokenData> _tokensData;
+	private static TokenDataset _tokenDataset;
 
 	// ------------------------------------------------------------------------
 	// METHODS
 	// ------------------------------------------------------------------------
 
 	private static void LoadTokensData() {
-		if(_tokensData is null) {
+		if(_tokenDataset is null) {
 			TokenLoader tokenLoader = new(new ResourceReader(TOKEN_DATA_FILE));
-			_tokensData = tokenLoader.LoadTokenData();
+			_tokenDataset = tokenLoader.LoadTokenData();
 		}
 	}
 
@@ -31,11 +31,11 @@ public class Interpreter : RubagelBase {
 		LoadTokensData();
 
 		// Parse tokens from the provider
-		TokenParser parser = new(lineReader, _tokensData);
+		TokenParser parser = new(lineReader, _tokenDataset);
 
 		IList<ParsedToken> tokens = parser.Parse();
 		foreach (ParsedToken token in tokens) {
-			Output.PrintLine($"{token}\n");
+			Output.PrintLine($"{token}", OutputColor.Green);
 		}
 	}
 }

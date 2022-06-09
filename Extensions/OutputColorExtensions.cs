@@ -1,4 +1,4 @@
-﻿namespace Spyz.Rubagel.IO.Extensions;
+﻿namespace Spyz.Rubagel.Extensions;
 
 public static class OutputColorExtensions {
 	public static string ToANSIEscapeSequence(this OutputColor color) {

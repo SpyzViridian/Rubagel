@@ -22,7 +22,7 @@ public class TokenLoader : RubagelBase {
 	private const int PRECEDENCE_INDEX = 3;
 
 	private readonly ILineReader _reader;
-	private IList<TokenData> _tokenDataList;
+	private TokenDataset _tokenDataset;
 	private Regex _splitRegex;
 
 	// ------------------------------------------------------------------------
@@ -33,18 +33,18 @@ public class TokenLoader : RubagelBase {
 		_reader = reader;
 	}
 
-	public IList<TokenData> LoadTokenData() {
-		_tokenDataList = new List<TokenData>();
+	public TokenDataset LoadTokenData() {
+		_tokenDataset = new TokenDataset();
 		_splitRegex = new Regex(SPLIT_REGEX);
 		
 		try {
 			_reader.ForEachLine(ParseLine);
 		} catch (IOException e) {
 			Output.PrintLine(e.Message, OutputColor.Red);
-			return new List<TokenData>();
+			return new TokenDataset();
 		}
 
-		return _tokenDataList;
+		return _tokenDataset;
 	}
 
 	private void ParseLine(string line, ParseInfo parseInfo) {
@@ -54,7 +54,7 @@ public class TokenLoader : RubagelBase {
 
 			try {
 				TokenData data = CreateTokenData(split, parseInfo);
-				_tokenDataList.Add(data);
+				_tokenDataset.Add(data);
 			} catch (ParsingException e) {
 				Output.PrintLine(e, OutputColor.Yellow);
 			}
