@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 public abstract class LineReader : ILineReader {
 
@@ -11,7 +12,7 @@ public abstract class LineReader : ILineReader {
 
 	protected string _resource;
 
-	public string ResourceName => _resource;
+	public string Resource => _resource;
 
 	// ------------------------------------------------------------------------
 	// METHODS
@@ -24,8 +25,9 @@ public abstract class LineReader : ILineReader {
 	protected abstract Stream GetStream();
 	protected virtual bool CanContinue(string line) => line is not null;
 
-	public virtual void ForEachLine(Action<string> action) {
+	public virtual void ForEachLine(LineConsumer lineConsumer) {
 
+		ParseInfo info = new(Resource, 1, 0);
 		Stream stream = GetStream();
 		StreamReader reader = new(stream);
 		string line;
@@ -33,7 +35,8 @@ public abstract class LineReader : ILineReader {
 		while (true) {
 			line = reader.ReadLine();
 			if (!CanContinue(line)) break;
-			action(line);
+			lineConsumer(line, info);
+			info.Line++;
 		}
 
 		stream.Dispose();

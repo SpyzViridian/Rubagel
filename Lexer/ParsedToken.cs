@@ -25,4 +25,8 @@ public struct ParsedToken {
 	}
 
 	public bool HasFlag(TokenFlag flag) => Data.HasFlag(flag);
+
+	public override string ToString() {
+		return $"{Type} : {Value}";
+	}
 }

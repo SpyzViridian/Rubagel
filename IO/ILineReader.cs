@@ -3,5 +3,5 @@
 using System;
 
 public interface ILineReader : ILineProvider {
-	public string ResourceName { get; }
+	public string Resource { get; }
 }

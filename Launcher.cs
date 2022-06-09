@@ -1,5 +1,7 @@
 ﻿namespace Spyz.Rubagel;
 
+using System.Threading.Tasks;
+
 #if STANDALONE
 public static class Launcher {
 

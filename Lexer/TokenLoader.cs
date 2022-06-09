@@ -23,7 +23,6 @@ public class TokenLoader : RubagelBase {
 
 	private readonly ILineReader _reader;
 	private IList<TokenData> _tokenDataList;
-	private ParseInfo _parseInfo;
 	private Regex _splitRegex;
 
 	// ------------------------------------------------------------------------
@@ -32,7 +31,6 @@ public class TokenLoader : RubagelBase {
 
 	public TokenLoader(ILineReader reader) {
 		_reader = reader;
-		_parseInfo = new ParseInfo(reader.ResourceName, 1, 0);
 	}
 
 	public IList<TokenData> LoadTokenData() {
@@ -49,40 +47,44 @@ public class TokenLoader : RubagelBase {
 		return _tokenDataList;
 	}
 
-	private void ParseLine(string line) {
+	private void ParseLine(string line, ParseInfo parseInfo) {
 		// Lines that starts with # or are empty should be ignored
 		if(!string.IsNullOrWhiteSpace(line) && line[0] != COMMENT_CHAR) {
 			string[] split = _splitRegex.Split(line);
 
 			try {
-				TokenData data = CreateTokenData(split);
+				TokenData data = CreateTokenData(split, parseInfo);
 				_tokenDataList.Add(data);
 			} catch (ParsingException e) {
 				Output.PrintLine(e, OutputColor.Yellow);
 			}
 		}
-
-		_parseInfo.Line++;
 	}
 
-	private TokenData CreateTokenData(string[] split) {
+	private TokenData CreateTokenData(string[] split, ParseInfo parseInfo) {
 		if (split.Length < 2) {
-			throw new ParsingException("Unable to parse Token + Pattern", _parseInfo);
+			throw new ParsingException("Unable to parse Token + Pattern", parseInfo);
 		}
 
 		if(!split[TOKEN_INDEX].TryEnum(out Token token)) {
-			throw new ParsingException($"Unrecognized token '{split[TOKEN_INDEX]}'", _parseInfo);
+			throw new ParsingException($"Unrecognized token '{split[TOKEN_INDEX]}'", parseInfo);
 		}
 
 		TokenData data = new(token, split[PATTERN_INDEX]);
 
+		try {
+			data.CreateRegex();
+		} catch (Exception) {
+			throw new ParsingException($"Unrecognized pattern '{data.Pattern}'", parseInfo);
+		}
+
 		if(split.TryIndex(FLAGS_INDEX, out string flags)) {
-			data.Flags = ParseFlags(flags);
+			data.Flags = ParseFlags(flags, parseInfo);
 		}
 
 		if (split.TryIndex(PRECEDENCE_INDEX, out string precedenceStr)) {
 			if (!int.TryParse(precedenceStr, out int precedence)) {
-				throw new ParsingException($"Invalid precedence value '{precedenceStr}'", _parseInfo);
+				throw new ParsingException($"Invalid precedence value '{precedenceStr}'", parseInfo);
 			}
 
 			data.Precedence = precedence;
@@ -91,11 +93,11 @@ public class TokenLoader : RubagelBase {
 		return data;
 	}
 
-	private TokenFlag ParseFlags(string flagStr) {
+	private TokenFlag ParseFlags(string flagStr, ParseInfo parseInfo) {
 		TokenFlag flag = TokenFlag.None;
 		foreach(string split in flagStr.Split(FLAG_SPLIT)) {
 			if(!split.TryEnum(out TokenFlag tf)) {
-				throw new ParsingException($"Unrecognized flag '{split}'", _parseInfo);
+				throw new ParsingException($"Unrecognized flag '{split}'", parseInfo);
 			}
 
 			flag |= tf;

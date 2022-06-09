@@ -3,9 +3,9 @@
 
 # Tokens to ignore
 Whitespace		\s+				Ignore
-LineComment		//				Ignore
-CommentOpen		/*				Ignore
-CommentClose	*/				Ignore
+LineComment		//.*$			Ignore
+CommentOpen		/\*				Ignore
+CommentClose	\*/				Ignore
 
 # String parsing
 Escape			(\\[^u])|(\\u[0-9A-Fa-f]{4})
@@ -35,15 +35,15 @@ Arrow			->
 Comma			,
 Semicolon		;
 VerticalBar		\|
-LeftSquare		[
-RightSquare		]
-LeftKey			{
-RightKey		}
-LeftParen		(
-RightParen		)
+LeftSquare		\[
+RightSquare		\]
+LeftKey			\{
+RightKey		\}
+LeftParen		\(
+RightParen		\)
 Hashtag			#
 At				@
-Dollar			$
+Dollar			\$
 
 # Boolean operators
 And				and				Binary&Infix				5
@@ -62,7 +62,7 @@ ModuloAssign	%=				Binary&Infix				2
 # Operators
 Add				\+				Binary&Infix				7
 Sub				-				Binary&Unary&Infix&Prefix	7
-Power			**				Binary&Infix				9
+Power			\*\*			Binary&Infix				9
 Mult			\*				Binary&Infix				8
 Div				/				Binary&Infix				8
 Modulo			%				Binary&Infix				8
@@ -89,5 +89,3 @@ Shared			shared
 When			when
 Return			return
 Define			define
-
-Error			.+

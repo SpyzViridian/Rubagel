@@ -4,6 +4,7 @@ using IO;
 using Spyz.Rubagel.Lexer;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class Rubagel : RubagelBase {
 
@@ -11,28 +12,35 @@ public class Rubagel : RubagelBase {
 	// PROPERTIES
 	// ------------------------------------------------------------------------
 
+	private const string EXIT = "exit";
+
+	private readonly Interpreter _interpreter;
+
 	// ------------------------------------------------------------------------
 	// METHODS
 	// ------------------------------------------------------------------------
 
+	public Rubagel() {
+		_interpreter = new Interpreter();
+	}
+
 	public void Test() {
-		TokenLoader tokenLoader = new(new ResourceReader("tokens"));
+		while(true) {
+			Output.Print(">", OutputColor.Cyan);
+			string line = Console.ReadLine();
+			if (line == EXIT) break;
 
-		IList<TokenData> tokensData;
+			EvaluateLine(line);
+		}
+	}
 
+	private void EvaluateLine(string line) {
 		try {
-			tokensData = tokenLoader.LoadTokenData();
+			_interpreter.Evaluate((StringReader)line);
 		} catch (Exception e) {
-			Output.PrintLine(e, OutputColor.Red);
-			return;
+			Output.PrintLine(e.Message, OutputColor.Red);
 		}
-
-		foreach (TokenData tokenData in tokensData) {
-			Output.PrintLine(tokenData);
-		}
-
-		ConsoleReader reader = new();
-		reader.ForEachLine(s => Output.PrintLine(s));
+		
 	}
 
 }

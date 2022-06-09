@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 internal class FolderReader : LineReader {
 
@@ -21,7 +22,7 @@ internal class FolderReader : LineReader {
 
 	protected override Stream GetStream() => null;
 
-	public override void ForEachLine(Action<string> action) {
+	public override void ForEachLine(LineConsumer lineConsumer) {
 		SearchOption option = _subdirectories ? 
 			SearchOption.AllDirectories
 			: SearchOption.TopDirectoryOnly;
@@ -30,7 +31,7 @@ internal class FolderReader : LineReader {
 
 		foreach (string file in files) {
 			FileReader reader = new(file);
-			reader.ForEachLine(action);
+			reader.ForEachLine(lineConsumer);
 		}
 	}
 }

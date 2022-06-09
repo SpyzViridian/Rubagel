@@ -17,7 +17,7 @@ public class ParsingException : Exception {
 	// ------------------------------------------------------------------------
 
 	public ParsingException(string message, ParseInfo parseInfo)
-		: base($"{parseInfo}: {message}") { }
+		: base($"{parseInfo}{(parseInfo.ToString().Length > 0 ? ": " : string.Empty)}{message}") { }
 
 	protected ParsingException(SerializationInfo info, StreamingContext context)
 		: base(info, context) { }
