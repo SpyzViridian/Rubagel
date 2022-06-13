@@ -10,7 +10,6 @@ public class Interpreter : RubagelBase {
 	// ------------------------------------------------------------------------
 	// PROPERTIES
 	// ------------------------------------------------------------------------
-
 	private const string TOKEN_DATA_FILE = "tokens";
 
 	private static TokenDataset _tokenDataset;
