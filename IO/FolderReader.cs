@@ -3,6 +3,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 internal class FolderReader : LineReader {
 
@@ -11,13 +13,15 @@ internal class FolderReader : LineReader {
 	// ------------------------------------------------------------------------
 
 	private readonly bool _subdirectories;
+	private readonly string _extension;
 
 	// ------------------------------------------------------------------------
 	// METHODS
 	// ------------------------------------------------------------------------
 
-	public FolderReader(string resource, bool subdirectories = true) : base(resource) {
+	public FolderReader(string resource, string extension, bool subdirectories = true) : base(resource) {
 		_subdirectories = subdirectories;
+		_extension = extension;
 	}
 
 	protected override Stream GetStream() => null;
@@ -27,7 +31,7 @@ internal class FolderReader : LineReader {
 			SearchOption.AllDirectories
 			: SearchOption.TopDirectoryOnly;
 
-		string[] files = Directory.GetFiles(_resource, "*.*", option);
+		string[] files = Directory.GetFiles(_resource, $"*.{_extension}", option);
 
 		foreach (string file in files) {
 			FileReader reader = new(file);

@@ -61,7 +61,7 @@ public class TokenLoader : RubagelBase {
 		}
 	}
 
-	private TokenData CreateTokenData(string[] split, ParseInfo parseInfo) {
+	private static TokenData CreateTokenData(string[] split, ParseInfo parseInfo) {
 		if (split.Length < 2) {
 			throw new ParsingException("Unable to parse Token + Pattern", parseInfo);
 		}
@@ -93,7 +93,7 @@ public class TokenLoader : RubagelBase {
 		return data;
 	}
 
-	private TokenFlag ParseFlags(string flagStr, ParseInfo parseInfo) {
+	private static TokenFlag ParseFlags(string flagStr, ParseInfo parseInfo) {
 		TokenFlag flag = TokenFlag.None;
 		foreach(string split in flagStr.Split(FLAG_SPLIT)) {
 			if(!split.TryEnum(out TokenFlag tf)) {

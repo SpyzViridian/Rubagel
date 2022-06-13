@@ -30,12 +30,8 @@ public class Interpreter : RubagelBase {
 		// Load tokens data if data is not loaded
 		LoadTokensData();
 
-		// Parse tokens from the provider
+		// Parse tokens
 		TokenParser parser = new(lineReader, _tokenDataset);
-
-		IList<ParsedToken> tokens = parser.Parse();
-		foreach (ParsedToken token in tokens) {
-			Output.PrintLine($"{token}", OutputColor.Green);
-		}
+		TokenProvider provider = parser.Parse();
 	}
 }

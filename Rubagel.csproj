@@ -24,8 +24,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IO\Extensions\" />
-  </ItemGroup>
-
 </Project>

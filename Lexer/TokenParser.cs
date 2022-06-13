@@ -4,7 +4,6 @@ using Spyz.Rubagel.IO;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 public class TokenParser : RubagelBase {
 
@@ -16,7 +15,7 @@ public class TokenParser : RubagelBase {
 
 	private readonly ILineReader _reader;
 	private readonly TokenDataset _tokenDataset;
-	private IList<ParsedToken> _tokens;
+	private TokenProvider _tokens;
 
 	private ParseInfo _currentParseInfo;
 	private bool _ignoring = false;
@@ -30,9 +29,9 @@ public class TokenParser : RubagelBase {
 		_tokenDataset = tokensData;
 	}
 
-	public IList<ParsedToken> Parse() {
+	public TokenProvider Parse() {
 		_ignoring = false;
-		_tokens = new List<ParsedToken>();
+		_tokens = new();
 		_reader.ForEachLine(ParseLine);
 
 		// If we're still ignoring, it's an error

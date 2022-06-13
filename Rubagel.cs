@@ -1,10 +1,7 @@
 ﻿namespace Spyz.Rubagel;
 
 using IO;
-using Spyz.Rubagel.Lexer;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class Rubagel : RubagelBase {
 
@@ -13,6 +10,7 @@ public class Rubagel : RubagelBase {
 	// ------------------------------------------------------------------------
 
 	private const string EXIT = "exit";
+	private const string EXTENSION = "rgl";
 
 	private readonly Interpreter _interpreter;
 
@@ -25,7 +23,20 @@ public class Rubagel : RubagelBase {
 	}
 
 	public void Test() {
-		while(true) {
+		// Read .rgl files first
+		string directory = Environment.CurrentDirectory;
+#if NET6_0 && DEBUG
+		directory = System.IO.Directory.GetParent(directory).Parent.Parent.FullName;
+#endif
+
+		FolderReader folderReader = new(directory, EXTENSION);
+		try {
+			_interpreter.Evaluate(folderReader);
+		} catch (Exception e) {
+			Output.PrintLine(e.Message, OutputColor.Red);
+		}
+
+		while (true) {
 			Output.Print(">", OutputColor.Cyan);
 			string line = Console.ReadLine();
 			if (line == EXIT) break;
