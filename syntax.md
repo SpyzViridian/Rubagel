@@ -8,19 +8,19 @@ program
 
 top_statement_group
     : top_statement ';' top_statement_group
-    : top_statement_block
+    | top_statement_block
     |
     ;
 
 top_statement_block
     : '{' top_statement_group '}'
-    : top_statement ';'
+    | top_statement ';'
     ;
 
 top_statement
     : rule_declaration
-    : function_declaration
-    : statement
+    | function_declaration
+    | statement
     ;
 ```
 
@@ -74,6 +74,17 @@ statement
     | any_assign_op
     ;
 
+statement_group
+    : statement ';' statement_group
+    | statement_block
+    |
+    ;
+
+statement_block
+    : '{' statement_group '}'
+    | statement ';'
+    ;
+
 return_statement
     : 'return' expression
     ;
@@ -84,6 +95,8 @@ return_statement
 ```ANTLR
 expression
     : value
+    | index_access
+    | function_call
     | paren_expression
     | op_expression
     ;
@@ -102,25 +115,34 @@ value
     | boolean
     | char
     | array
-    | rule_identifier
-    | variable_identifier
-    | function_identifier
-    | function_call
-    | index_access
+    | string
+    | any_identifier
     ;
 
 array
-    : '[' cond_expression ']'
+    : '[' cond_expression_args ']'
+    ;
+
+any_identifier
+    : rule_identifier
+    | variable_identifier
+    | function_identifier
+    ;
+
+function_call
+    : any_identifier '(' arguments ')'
     ;
 
 arguments
-    : argument ',' arguments
-    | argument
+    : expression ',' arguments
+    | expression
     | 
     ;
 
-argument
-    : expression
+cond_expression_args:
+    : cond_expression ',' cond_expression_args
+    | cond_expression
+    |
     ;
 
 index_access
@@ -323,3 +345,5 @@ modulo_assign_op
     : scoped_variable '%=' expression
     ;
 ```
+
+## 1.5 String
